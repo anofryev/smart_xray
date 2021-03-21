@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Главная</title>
+</head>
+<body>
+    <h1>Hello</h1>
+    {% if is_smart_ready %}
+        <p>You are authorized and ready to make API requests for <em>{{ name }}</em>.</p>
+        <p>{{name}} prescriptions:
+            {% for pres in prescriptions %}
+                <ul><li>{{ prescriptions }}</li></ul>
+            {% endfor %}
+        </p>
+    {% else %}
+    <p>Please <a href="{{ auth_url }}">authorize</a>.</p>
+    {% endif %}
+    <p>
+        {% for obj in auth_state.items %}
+            <ul><li>{{ obj }}:  </li></ul>
+        {% endfor %}
+    </p>
+
+</body>
+</html>

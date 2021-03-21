@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}
+    Выбор сервера синхронизации
+{% endblock title %}
+
+{% block content %}
+    {% load static %}
+   <p><a href="{{ auth_url }}"><img src="static/images/smart_server.JPG" width="50"
+                                 height="50" border="0" alt="Пример"></a></p>
+    <p>Сервер авторизации "SMART"</p>
+{% endblock content %}
