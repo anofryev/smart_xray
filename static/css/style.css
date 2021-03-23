@@ -64,3 +64,13 @@ body {
     font-size: 3.5rem;
   }
 }
+/*
+ * Username bar
+ */
+.username-bar{
+  padding: .5rem 1rem;
+  font-size: 5rem;
+  color: #fff;
+  border-bottom-color: #fff;
+  background-color: transparent;
+}
