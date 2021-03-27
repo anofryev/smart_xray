@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
-from .models import
 import fhirclient.models.imagingstudy as imagingstudy
 
 # Create your views here.
