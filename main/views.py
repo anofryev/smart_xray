@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
+from .models import
+import fhirclient.models.imagingstudy as imagingstudy
+
 # Create your views here.
 smart_session = None
 
@@ -50,11 +53,22 @@ def callback(request):
     try:
         smart_session.smart.handle_callback(request.build_absolute_uri())
     except Exception as e:
+
         context = {'error': e}
         print("an error ocured:", e)
         return render(request, 'callback_error.html', context)
-    return redirect('/')
+    return redirect('/synchronizing')
 
+def synchronizing(request):
+    """ OAuth2 callback interception."""
+    try:
+        imagingStudySearch = imagingstudy.ImagingStudy.where(struct={'modality': 'DX'})
+
+    except Exception as e:
+        context = {'error': e}
+        print("an error ocured:", e)
+        return render(request, 'callback_error.html', context)
+    return redirect('/synchronizing')
 
 def logout(request):
     smart_session.logout()
