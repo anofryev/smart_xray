@@ -8,7 +8,7 @@ class Session:
     # Дефолтные настройки для SMART клиента
     smart_defaults = {
         'app_id': 'my_web_app',
-        'api_base': 'http://launch.smarthealthit.org/v/r3/sim/eyJoIjoiMSIsImoiOiIxIn0/fhir',
+        'api_base': 'http://localhost:4013/v/r3/sim/eyJoIjoiMSIsImoiOiIxIn0/fhir',
         'redirect_uri': 'http://localhost:8000/fhir-app/',
     }
 
