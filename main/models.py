@@ -60,12 +60,11 @@ class Series(models.Model):
 
 class Instance(models.Model):
 
-    identifier = models.CharField("Идентификатор", max_length=100)
+    number = models.CharField("Идентификатор", max_length=100)
     date = models.CharField("Дата исследования", max_length=50, null=True)
-    description = models.CharField("Описание", max_length=2000, null=True)
+    title = models.CharField("Описание", max_length=2000, null=True)
     image = models.ImageField("Изображение", upload_to="instances/", null=True)
     series = models.ForeignKey(Series, verbose_name="Серия", on_delete=models.CASCADE)
-    reference = models.CharField("Ссылка", max_length=1000, null=True)
 
 
 

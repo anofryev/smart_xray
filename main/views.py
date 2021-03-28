@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
-import fhirclient.models.imagingstudy as imagingstudy
+from .models_sync import synchronizing
 
 # Create your views here.
 smart_session = None
@@ -17,35 +17,6 @@ def server_choose(request):
     context = {'auth_url': auth_url}
     return render(request, 'server_choose.html', context)
 
-def index(request):
-
-    """ The app's main page."""
-    global smart_session
-    smart_session = Session(request)
-    smart = smart_session.smart
-    pres = None
-    name = None
-    prescriptions = None
-    is_smart_ready = smart.ready
-    auth_url = smart.authorize_url
-    if is_smart_ready and smart.patient is not None: # "ready" may be true but the access token may have expired, making smart.patient = None
-        name = smart.human_name(
-            smart.patient.name[0] if smart.patient.name and len(smart.patient.name) > 0 else 'Unknown')
-
-        pres = smart_session.get_prescriptions()
-        if pres is not None:
-            prescriptions = [smart_session.get_med_name(p) for p in pres]
-    else:
-        auth_url = smart.authorize_url
-    context = {'prescriptions': prescriptions,
-               'is_smart_ready': is_smart_ready,
-               'name': name,
-               'auth_url': auth_url,
-               'auth_state': request.session.get('state')
-               }
-    return render(request, 'index.html', context)
-
-
 # Возвращение от сервера авторизации
 def callback(request):
     """ OAuth2 callback interception."""
@@ -56,18 +27,15 @@ def callback(request):
         context = {'error': e}
         print("an error ocured:", e)
         return render(request, 'callback_error.html', context)
-    return redirect('/synchronizing')
+    return redirect('/sync')
 
-def synchronizing(request):
-    """ OAuth2 callback interception."""
-    try:
-        imagingStudySearch = imagingstudy.ImagingStudy.where(struct={'modality': 'DX'})
-
-    except Exception as e:
-        context = {'error': e}
-        print("an error ocured:", e)
+def sync(request):
+    if smart_session:
+        synchronizing(smart=smart_session.smart, request=request)
+    else:
+        context = {'error': 'error while synchronizing, no smart session'}
         return render(request, 'callback_error.html', context)
-    return redirect('/synchronizing')
+    return redirect('/success')
 
 def logout(request):
     smart_session.logout()
@@ -79,3 +47,7 @@ def reset(request):
         del request.session['state']
         print('State deleted from session')
     return redirect('/')
+
+
+def success(request):
+    return render(request, 'success.html')
