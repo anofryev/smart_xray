@@ -20,7 +20,7 @@ class Patient(models.Model):
 
 class ImagingStudy(models.Model):
     uid = models.CharField("UID", max_length=100, default="urn:oid:1.2.3.4.5")
-    identifier = models.CharField("Идентификатор", max_length=100)
+    identifier = models.CharField("Идентификатор", max_length=100, null=True)
     date = models.CharField("Дата исследования", max_length = 50, null=True)
     numberOfSeries = models.PositiveIntegerField("Количество серий", null=True)
     numberOfInstances = models.PositiveIntegerField("Количество снимков", null=True)
@@ -31,7 +31,7 @@ class ImagingStudy(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.identifier
+        return self.uid
 
 
 class Series(models.Model):
@@ -42,6 +42,8 @@ class Series(models.Model):
     description = models.CharField("Описание", max_length=2000, null=True)
     imaging_study = models.ForeignKey(ImagingStudy, verbose_name="Исследование", on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.uid
 
 class Instance(models.Model):
     uid = models.CharField("UID", max_length=100, default="urn:oid:1.2.3.4.5")

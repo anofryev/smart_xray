@@ -72,10 +72,10 @@ def synchronizing(smart, request):
                             model_serie.description = serie.description
                         if serie.numberOfInstances:
                             model_serie.numberOfInstances = int(serie.numberOfInstances)
-                        if not Series.objects.filter(identifier=model_serie.identifier).exists():
+                        if not Series.objects.filter(uid=model_serie.uid).exists():
                             model_serie.save()  # Сохраняем модель, если в БД такой нет
                         else:  # Иначе получаем инстанс из БД
-                            model_serie = Series.objects.get(identifier=model_serie.identifier)
+                            model_serie = Series.objects.get(uid=model_serie.uid)
                     except Exception as e:
                         print('Ошибка при создании серии: {0}'.format(e))
                     for instance in serie.instance: #В цикле по всем кадрам в листе кадров
@@ -92,7 +92,6 @@ def synchronizing(smart, request):
                                 model_instance.save()  # Сохраняем модель, если в БД такой нет
                         except Exception as e:
                             print('Ошибка при создании инстанса: {0}'.format(e))
-
             except Exception as e:
                 print('Ошибка при сохранении моделей в БД: {0}'.format(e))
 
