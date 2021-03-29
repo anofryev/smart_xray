@@ -7,7 +7,7 @@ smart_session = None
 
 # Онсовная страница
 def main_page(request):
-    context = None
+    context = {'test_info' : request.user}
     return render(request, 'main_page.html', context)
 
 def server_choose(request):
@@ -30,8 +30,13 @@ def callback(request):
     return redirect('/sync')
 
 def sync(request):
+    print('во view sync')
     if smart_session:
-        synchronizing(smart=smart_session.smart, request=request)
+        if request.user.is_authenticated:
+            synchronizing(smart=smart_session.smart, request=request)
+        else:
+            context = {'error': 'error while synchronizing, not authenticated'}
+            return render(request, 'callback_error.html', context)
     else:
         context = {'error': 'error while synchronizing, no smart session'}
         return render(request, 'callback_error.html', context)

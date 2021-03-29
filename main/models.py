@@ -33,7 +33,7 @@ class Patient(models.Model):
 
 
 class ImagingStudy(models.Model):
-
+    uid = models.CharField("UID", max_length=100, default="urn:oid:1.2.3.4.5")
     identifier = models.CharField("Идентификатор", max_length=100)
     date = models.CharField("Дата исследования", max_length = 50, null=True)
     numberOfSeries = models.PositiveIntegerField("Количество серий", null=True)
@@ -49,8 +49,7 @@ class ImagingStudy(models.Model):
 
 
 class Series(models.Model):
-
-    identifier = models.CharField("Идентификатор", max_length=100)
+    uid = models.CharField("UID", max_length=100, default="urn:oid:1.2.3.4.5")
     date = models.CharField("Дата исследования", max_length=50, null=True)
     numberOfInstances = models.PositiveIntegerField("Количество снимков", null=True)
     reference = models.CharField("Ссылка", max_length=1000, null=True)
@@ -59,7 +58,7 @@ class Series(models.Model):
 
 
 class Instance(models.Model):
-
+    uid = models.CharField("UID", max_length=100, default="urn:oid:1.2.3.4.5")
     number = models.CharField("Идентификатор", max_length=100)
     date = models.CharField("Дата исследования", max_length=50, null=True)
     title = models.CharField("Описание", max_length=2000, null=True)
