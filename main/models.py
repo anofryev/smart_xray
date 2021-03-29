@@ -8,13 +8,6 @@ class Practitioner(models.Model):
     given = models.CharField("Имя", max_length=100, null=True)
     family = models.CharField("Фамилия", max_length=100, null=True)
 
-    def __str__(self):
-        result = None
-        if self.family:
-            result += self.family
-        if self.given:
-            result += self.given
-        return result
 
 
 class Patient(models.Model):
@@ -23,13 +16,6 @@ class Patient(models.Model):
     given = models.CharField("Имя", max_length=100, null=True)
     family = models.CharField("Фамилия", max_length=100, null=True)
 
-    def __str__(self):
-        result = None
-        if self.family:
-            result += self.family
-        if self.given:
-            result += self.given
-        return result
 
 
 class ImagingStudy(models.Model):

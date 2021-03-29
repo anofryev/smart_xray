@@ -11,11 +11,19 @@ def main_page(request):
     return render(request, 'main_page.html', context)
 
 def server_choose(request):
-    global smart_session
-    smart_session = Session(request)
-    auth_url = smart_session.smart.authorize_url
-    context = {'auth_url': auth_url}
-    return render(request, 'server_choose.html', context)
+    if request.user.is_authenticated:
+        global smart_session
+        try:
+            smart_session = Session(request)
+            auth_url = smart_session.smart.authorize_url
+            context = {'auth_url': auth_url}
+            return render(request, 'server_choose.html', context)
+        except Exception as e:
+            return render(request, 'callback_error.html', context)
+    else:
+        print('ошибка , не авторизован')
+        context ={'error': 'Ошибка. Требуется авторизация'}
+        return render(request, 'callback_error.html', context)
 
 # Возвращение от сервера авторизации
 def callback(request):
@@ -35,7 +43,7 @@ def sync(request):
         if request.user.is_authenticated:
             synchronizing(smart=smart_session.smart, request=request)
         else:
-            context = {'error': 'error while synchronizing, not authenticated'}
+            context = {'error': 'ошибка! пользователь не авторизован!'}
             return render(request, 'callback_error.html', context)
     else:
         context = {'error': 'error while synchronizing, no smart session'}
