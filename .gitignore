@@ -1,3 +1,5 @@
 venv/
 example/
 __pycache__/
+series/
+dicoms/

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
 from .models_sync import synchronizing
+from .models import Series
 
 # Create your views here.
 smart_session = None
@@ -64,3 +65,8 @@ def reset(request):
 
 def success(request):
     return render(request, 'success.html')
+
+def test_file_add(request):
+    obj = Series.objects.all()[0]
+    obj.get_remote_image()
+    return render(request, "success.html")
