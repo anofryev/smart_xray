@@ -41,6 +41,7 @@ class Series(models.Model):
     reference = models.CharField("Ссылка", max_length=1000, null=True)
     description = models.CharField("Описание", max_length=2000, null=True)
     imaging_study = models.ForeignKey(ImagingStudy, verbose_name="Исследование", on_delete=models.CASCADE)
+    dicom_file = models.FileField("DICOM Файл", upload_to="dicoms/", null=True)
 
     def __str__(self):
         return self.uid
