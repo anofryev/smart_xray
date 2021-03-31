@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
-from .models_sync import synchronizing
+from .fhir_sync import synchronizing
 from .models import Series
 
 # Create your views here.

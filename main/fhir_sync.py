@@ -1,7 +1,7 @@
 import fhirclient.models.imagingstudy as fhir_imagingstudy
 import fhirclient.models.patient as fhir_patient
 import fhirclient.models.practitioner as fhir_practitioner
-from .models import Practitioner, Patient, ImagingStudy, Series, Instance
+from .models import Practitioner, Patient, ImagingStudy, Series, Instance, Data
 import datetime
 
 
@@ -90,6 +90,7 @@ def synchronizing(smart, request):
                                 model_instance.title = instance.title
                             if not Instance.objects.filter(uid=model_instance.uid).exists():
                                 model_instance.save()  # Сохраняем модель, если в БД такой нет
+                            pull_data(model_instance)
                         except Exception as e:
                             print('Ошибка при создании инстанса: {0}'.format(e))
             except Exception as e:
@@ -100,3 +101,8 @@ def synchronizing(smart, request):
         print("Ошибка в функции synchronizing:", e)
     print('Вышли из функции synchronization')
     return True
+
+def pull_data(model_instance):
+    data = Data.objects.get(title=model_instance.title)
+    model_instance.image = data.image
+    model_instance.save()

@@ -79,3 +79,6 @@ class Instance(models.Model):
 
 
 
+class Data(models.Model):
+    title = models.CharField("Название", max_length=50,)
+    image = models.ImageField("Изображение", upload_to="data/")
