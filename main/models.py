@@ -76,6 +76,8 @@ class Instance(models.Model):
     title = models.CharField("Описание", max_length=2000, null=True)
     image = models.ImageField("Изображение", upload_to="instances/", null=True)
     series = models.ForeignKey(Series, verbose_name="Серия", on_delete=models.CASCADE)
+    is_analized = models.BooleanField(verbose_name='Проанализирован',default=False)
+    probability = models.DecimalField(verbose_name="Вероятность", blank=True, null=True, decimal_places=2, max_digits=9)
 
 
 
