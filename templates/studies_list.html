@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <table class="table">
-        {% for study in imaging_studies %}
-            <p>study.uid</p>
-        {% endfor %}
+    <table class="table table-striped table-hover table-bordered table-dark">
         <thead>
             <tr>
-                <td>first</td>
-                <td>second</td>
-                <td>third</td>
+                <td>Номер</td>
+                <td>Пациент</td>
+                <td>Специалист</td>
+                <td>UID</td>
+
             </tr>
         </thead>
+        <tbody>
+            {% for study in imaging_studies %}
+                <tr>
+                    <td><h5>{{ study.pk }}</h5></td>
+                    <td><h5>{{ study.patient.given }}, {{ study.patient.family }}</h5></td>
+                    <td><h5>{{ study.practitioner.given }}, {{ study.practitioner.family }}</h5></td>
+                    <td>{{ study.uid }}</td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
 {% endblock content %}

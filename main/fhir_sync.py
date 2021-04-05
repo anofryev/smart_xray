@@ -57,10 +57,10 @@ def synchronizing(smart, request):
                 if imaging_study.description:
                     model_imaging_study.description = imaging_study.description
                 model_imaging_study.user = request.user
-                if not ImagingStudy.objects.filter(identifier=model_imaging_study.identifier).exists():
+                if not ImagingStudy.objects.filter(uid=model_imaging_study.uid).exists():
                     model_imaging_study.save() # Сохраняем инстанс ImagingStudy, если в БД такой нет
                 else: # Иначе получаем инстанс ImagingStudy из БД
-                    model_imaging_study = ImagingStudy.objects.get(identifier=model_imaging_study.identifier)
+                    model_imaging_study = ImagingStudy.objects.get(identifier=model_imaging_study.uid)
                 for serie in imaging_study.series: # Далее для каждой серии в листе серий:
                     try:
                         print('Сохраняем серии')
