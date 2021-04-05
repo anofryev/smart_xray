@@ -12,9 +12,10 @@ class StudiesView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return ImagingStudy.objects.filter(self.request.user)
+            return ImagingStudy.objects.filter(user=self.request.user)
     model = ImagingStudy
     template_name = 'studies_list.html'
+    context_object_name = 'imaging_studies'
 
 
 

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table class="table">
+        {% for study in imaging_studies %}
+            <p>study.uid</p>
+        {% endfor %}
+        <thead>
+            <tr>
+                <td>first</td>
+                <td>second</td>
+                <td>third</td>
+            </tr>
+        </thead>
+    </table>
+
+{% endblock content %}
