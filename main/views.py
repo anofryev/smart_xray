@@ -1,10 +1,22 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
 from .fhir_sync import synchronizing
-from .models import Series
+from django.views.generic import ListView
+from .models import Series, ImagingStudy
+from .neural_network import nn_predict
 
 # Create your views here.
 smart_session = None
+
+class StudiesView(ListView):
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return ImagingStudy.objects.filter(self.request.user)
+    model = ImagingStudy
+    template_name = 'studies_list.html'
+
+
 
 # Онсовная страница
 def main_page(request):
@@ -49,6 +61,7 @@ def sync(request):
     else:
         context = {'error': 'error while synchronizing, no smart session'}
         return render(request, 'callback_error.html', context)
+    nn_predict()
     return redirect('/success')
 
 def logout(request):
@@ -66,7 +79,6 @@ def reset(request):
 def success(request):
     return render(request, 'success.html')
 
-def test_file_add(request):
-    obj = Series.objects.all()[0]
-    obj.get_remote_image()
+def test_nn_predict(request):
+    nn_predict()
     return render(request, "success.html")
