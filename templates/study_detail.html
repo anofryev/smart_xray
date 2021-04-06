@@ -1,5 +1,48 @@
 {% extends 'base.html'%}
 
-{% block content %}
+{% block title %}
+    Исследование
+{% endblock title %}
 
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <p><h5>Исследование №: {{ imaging_study.uid }}</h5></p>
+        </div>
+        <div class="row">
+            <div class="col" style="align : left">
+                <p style="text-align : left">Пациент: {{ imaging_study.practitioner.natural_name }}</p>
+                <p style="text-align : left">Специалист: {{ imaging_study.patient.natural_name }}</p>
+                <p style="text-align : left">Количество серий: {{ imaging_study.numberOfSeries }}</p>
+                <p style="text-align : left">Количество кадров: {{ imaging_study.numberOfInstances}}</p>
+                <p style="text-align : left">Описание: {{ imaging_study.patient.description}}</p>
+            </div>
+        </div>
+        {% for serie in imaging_study.get_series_related %}
+            <div class="row">
+                <p><h6>Серия №: {{ serie.uid }}</h6></p>
+            </div>
+        <div class="row">
+            {% for instance in serie.get_instances_related %}
+                <div class="col">
+                    <p><h5>Снимок № {{ 1 }} </h5></p>
+                    <p style="text-align : left">Снимок
+                        {% if instance.is_analized %}<b> Проанализирован</b>{% endif %}
+                        {% if not instance.is_analized %}<b> НЕ проанализирован</b>{% endif %}
+                    </p>
+                    {% if instance.is_analized %}
+                    <p style="text-align : left">Вероятность наличия аномалии:</p>
+                    <h2>{{instance.probability}}</h2>
+                    {% endif %}
+
+                </div>
+                <div class="col">
+                    <img src="{{instance.image.url}}" alt="" width="300" height="300">
+                </div>
+
+            {% endfor %}
+        </div>
+        {% endfor %}
+        </div>
+    </div>
 {% endblock content %}

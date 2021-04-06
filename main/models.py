@@ -3,12 +3,16 @@ from django.core.files.temp import NamedTemporaryFile
 from django.db import models
 from django.contrib.auth.models import User
 from urllib.request import urlretrieve, urlopen
+from django.urls import reverse
 
 class Practitioner(models.Model):
 
     identifier = models.CharField("Идентификатор", max_length=100, null=True)
     given = models.CharField("Имя", max_length=100, null=True)
     family = models.CharField("Фамилия", max_length=100, null=True)
+
+    def natural_name(self):
+        return self.given + ' ' + self.family
 
 
 
@@ -18,7 +22,8 @@ class Patient(models.Model):
     given = models.CharField("Имя", max_length=100, null=True)
     family = models.CharField("Фамилия", max_length=100, null=True)
 
-
+    def natural_name(self):
+        return self.given + ' ' + self.family
 
 class ImagingStudy(models.Model):
     uid = models.CharField("UID", max_length=100, default="urn:oid:1.2.3.4.5")
@@ -31,6 +36,10 @@ class ImagingStudy(models.Model):
     patient = models.ForeignKey(Patient, verbose_name= "Пациент", on_delete=models.SET_NULL, null=True)
     practitioner = models.ForeignKey(Practitioner, verbose_name="Специалист", on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+
+    def get_series_related(self):
+        series = Series.objects.filter(imaging_study=self)
+        return series
 
     def __str__(self):
         return self.uid
@@ -67,6 +76,10 @@ class Series(models.Model):
         img_temp.flush()
         serie.image_field.save("image_%s" % serie.pk, File(img_temp))
         serie.save()
+
+    def get_instances_related(self):
+        instances = Instance.objects.filter(series=self)
+        return instances
 
 
 class Instance(models.Model):

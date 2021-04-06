@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .session_class import Session
 from .fhir_sync import synchronizing
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 from .models import Series, ImagingStudy
 from .neural_network import nn_predict
 
@@ -18,6 +18,20 @@ class StudiesView(ListView):
     context_object_name = 'imaging_studies'
 
 
+class StudyDetailView(View):
+
+    def get(self, request, pk):
+        imaging_study = ImagingStudy.objects.get(id=pk)
+        series = imaging_study.get_series_related()
+        context = {
+            "imaging_study": imaging_study,
+            "series": series
+            }
+        instances = []
+        for serie in series:
+            instances.append(serie.get_instances_related())
+        context['instances'] = instances
+        return render(request, "study_detail.html", context)
 
 # Онсовная страница
 def main_page(request):

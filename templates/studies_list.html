@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Список исследований
+{% endblock title %}
+
 {% block content %}
     <table class="table table-striped table-hover table-bordered table-dark">
         <thead>
@@ -14,11 +18,22 @@
         <tbody>
             {% for study in imaging_studies %}
                 <tr>
-                    <td><h5>{{ study.pk }}</h5></td>
-                    <td><h5>{{ study.patient.given }}, {{ study.patient.family }}</h5></td>
-                    <td><h5>{{ study.practitioner.given }}, {{ study.practitioner.family }}</h5></td>
-                    <td>{{ study.uid }}</td>
-
+                    <td>
+                        <a class="nav-link text-white" href="{% url 'study_detail' study.pk %}"><h5>{{ study.pk }}</h5></a>
+                    </td>
+                    <td>
+                        <a class="nav-link text-white" href="{% url 'study_detail' study.pk %}"><h5>
+                                        {{ study.patient.given }}, {{ study.patient.family }}</h5>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link text-white" href="{% url 'study_detail' study.pk %}"><h5>
+                            {{ study.practitioner.given }}, {{ study.practitioner.family }}</h5>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link text-white" href="{% url 'study_detail' study.pk %}"><h5>{{ study.uid }}</h5></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -69,8 +69,12 @@ body {
  */
 .username-bar{
   padding: .5rem 1rem;
-  font-size: 5rem;
+  font-size: 4rem;
   color: #fff;
   border-bottom-color: #fff;
   background-color: transparent;
+}
+
+#main_container{
+    min-height: 100vh;
 }

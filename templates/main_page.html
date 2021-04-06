@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-    <main class="px-3">
-        <h1>Выявление пневмонии</h1>
-        <p class="lead">Это главный экран приложения. Сейчас Вы можете синхронизировать аккаунт для получения прогнозов.</p>
-        <p class="lead">
-            <a href="{% url 'server_choose' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Синхронизировать</a>
-        </p>
+    <main class="px-3" style="padding: 20vh">
+        <div id="main_container">
+            <h1>Выявление пневмонии</h1>
+            <p class="lead">Это главный экран приложения. Сейчас Вы можете синхронизировать аккаунт для получения прогнозов.</p>
+            <p class="lead">
+                <a href="{% url 'server_choose' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Синхронизировать</a>
+            </p>
+        </div>
     </main>
 {% endblock content %}
