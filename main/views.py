@@ -95,5 +95,8 @@ def success(request):
     return render(request, 'success.html')
 
 def test_nn_predict(request):
-    nn_predict()
+    try:
+        nn_predict()
+    except Exception as e:
+        return render(request, 'callback_error.html')
     return render(request, "success.html")

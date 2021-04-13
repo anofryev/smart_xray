@@ -92,7 +92,8 @@ class Instance(models.Model):
     is_analized = models.BooleanField(verbose_name='Проанализирован',default=False)
     probability = models.DecimalField(verbose_name="Вероятность", blank=True, null=True, decimal_places=2, max_digits=9)
 
-
+    def __str__(self):
+        return self.uid
 
 class Data(models.Model):
     title = models.CharField("Название", max_length=50,)
