@@ -7,7 +7,7 @@ admin.site.register(Practitioner)
 admin.site.register(Patient)
 admin.site.register(ImagingStudy)
 admin.site.register(Instance)
-
+admin.site.register(Data)
 
 @admin.register(Series)
 class SeriesAdmin(admin.ModelAdmin):

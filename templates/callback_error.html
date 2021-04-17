@@ -7,5 +7,6 @@
 {% block content %}
     <div style="padding: 20vh">
         <p>Ошибка: {{ error }}</p>
+        <a href="{% url 'main_page' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white">На главную</a>
     </div>
 {% endblock content %}

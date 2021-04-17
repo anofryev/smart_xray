@@ -50,7 +50,7 @@ def server_choose(request):
             return render(request, 'callback_error.html', context)
     else:
         print('ошибка , не авторизован')
-        context ={'error': 'Ошибка. Требуется авторизация'}
+        context ={'error': 'пользователь не авторизован. Пожалуйста, авторизуйтесь, и повторите операцию.'}
         return render(request, 'callback_error.html', context)
 
 # Возвращение от сервера авторизации
@@ -71,7 +71,7 @@ def sync(request):
         if request.user.is_authenticated:
             synchronizing(smart=smart_session.smart, request=request)
         else:
-            context = {'error': 'ошибка! пользователь не авторизован!'}
+            context = {'error': 'пользователь не авторизован. Пожалуйста, авторизуйтесь, и повторите операцию.'}
             return render(request, 'callback_error.html', context)
     else:
         context = {'error': 'error while synchronizing, no smart session'}

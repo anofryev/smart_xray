@@ -3,6 +3,7 @@ import fhirclient.models.patient as fhir_patient
 import fhirclient.models.practitioner as fhir_practitioner
 from .models import Practitioner, Patient, ImagingStudy, Series, Instance, Data
 import datetime
+from wado.wado import WadoConnection # Dicom wado-rs соединение для загрузки соответствующих dicom файлов
 
 
 def synchronizing(smart, request):
@@ -11,6 +12,10 @@ def synchronizing(smart, request):
         imaging_study_search = fhir_imagingstudy.ImagingStudy.where(struct={'modality': 'DX'}) # Ищем все ImagingStudy нужного типа
         imaging_studies = imaging_study_search.perform_resources(smart.server)
         for imaging_study in imaging_studies: # Перебираем все найденные ImagingStudies
+            try:
+                pull_wado(imaging_study, request) # Загрузка соответствующих Dicom
+            except Exception as e:
+                print(e)
             model_imaging_study = ImagingStudy()
             model_patient = Patient()
             model_practitioner = Practitioner()
@@ -19,13 +24,14 @@ def synchronizing(smart, request):
                 patient_related = fhir_patient.Patient.read(imaging_study.patient.id, smart.server)
                 model_patient.identifier = patient_related.id
                 if patient_related.name[0].given:
-                    model_patient.given = patient_related.name[0].given
+                    model_patient.given = patient_related.name[0].given[0]
                 if patient_related.name[0].family:
                     model_patient.family = patient_related.name[0].family
                 if not Patient.objects.filter(identifier=model_patient.identifier).exists():
                     model_patient.save()
                 else:
                     model_patient = Patient.objects.get(identifier=model_patient.identifier)
+                    model_patient.save()
             except Exception as e:
                 print('Ошибка нахождения пациента: {0}'.format(e))
 
@@ -34,7 +40,7 @@ def synchronizing(smart, request):
                 practitioner_related = fhir_practitioner.Practitioner.read(imaging_study.referrer.id, smart.server)
                 model_practitioner.identifier = practitioner_related.id
                 if practitioner_related.name[0].given:
-                    model_practitioner.given = practitioner_related.name[0].given
+                    model_practitioner.given = practitioner_related.name[0].given[0]
                 if practitioner_related.name[0].family:
                     model_practitioner.family = practitioner_related.name[0].family
                 if not Practitioner.objects.filter(identifier=model_practitioner.identifier).exists():
@@ -101,6 +107,28 @@ def synchronizing(smart, request):
         print("Ошибка в функции synchronizing:", e)
     print('Вышли из функции synchronization')
     return True
+
+#Подтягивание соответствующих dicom
+
+def pull_wado(study, request):
+    try:
+        state = request.session.get('state')
+        connection = WadoConnection(
+            hostname=study.endpoint,
+            port="80",
+            username=state.get('server').get('id_token'),
+            password=state.get('server').get('access_token')
+        )
+
+        connection.download_wado_image(
+            resource_parameters={"studyInstanceUID": study.uid, "objectUID": study.uid},
+            folder="/data",
+        )
+    except Exception as e:
+        print(e)
+
+
+
 
 def pull_data(model_instance):
     data = Data.objects.get(title=model_instance.title)

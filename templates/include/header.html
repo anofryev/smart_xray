@@ -4,7 +4,7 @@
         <nav class="nav nav-masthead justify-content-center float-md-end">
             <a class="nav-link" href="{% url 'server_choose' %}">Синхронизация</a>
             <a class="nav-link" href="{% url 'studies_list' %}">Исследования</a>
-            <a class="nav-link active" aria-current="page" href="#">Главная</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'main_page' %}">Главная</a>
             {% if user.is_authenticated %}
                 <a class="nav-link" href="{% url 'account_logout' %}">Выход</a>
             {% else %}
